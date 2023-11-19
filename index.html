@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet">
+    <title>Форма входа</title>
+    <style>
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: url('top.svg') center top/100% auto, url('bot.svg') center bottom/100% auto, linear-gradient(to bottom left, #4AFFD8, #00CAFF, #2D93FF, #007CFF);
+            background-repeat: no-repeat;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .login-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            max-width: 550px;
+            margin: auto;
+            padding: 20px;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        .login-container img.logo {
+            width: 43%;
+            height: 9%;
+            object-fit: contain;
+            margin-bottom: 50px;
+        }
+
+        input[type="text"], input[type="email"] {
+            font-family: 'Inter', sans-serif;
+            width: 100%;
+            color: white !important; /* Устанавливаем белый цвет текста */
+            font-size: 16px;
+            padding: 20px;
+            margin: 10px 0;
+            border: 2px solid white;
+            background: linear-gradient(to left, #39dff5, #53abff);
+            border-radius: 22px;
+            transition: border-color 0.3s;
+            caret-color: #2D93FF;
+            box-sizing: border-box;
+        }
+        input[type="text"]::placeholder, input[type="email"]::placeholder {
+            color: #FFFFFF;
+        }
+
+        input[type="text"]:focus:placeholder-shown, 
+        input[type="email"]:focus:placeholder-shown {
+            border-color: #2D93FF; 
+            background: white;
+            outline: none;
+        }
+
+        input[type="text"]:focus:not(:placeholder-shown), 
+        input[type="email"]:focus:not(:placeholder-shown) {
+            border-color: #2D93FF; 
+            background: white;
+            outline: none;
+        }
+
+        input[type="text"]:focus, 
+        input[type="email"]:focus {
+            color: #2D93FF !important;
+            border: 2px solid #2D93FF;
+        }
+
+        input[type="text"]:not(:focus), 
+        input[type="email"]:not(:focus) {
+            color: white !important;
+        }
+
+
+
+
+        input[type="text"].error, input[type="email"].error{
+            border: 2px solid #FF7900;
+            color: #FF7900;
+        }
+
+
+        input[type="text"].error::placeholder, input[type="email"].error::placeholder {
+            color: #FF7900;
+        }
+
+        .error {
+            border: 2px solid #FF7900;
+        }
+
+        button {
+            font-family: 'Inter', sans-serif;
+            font-weight:bold;
+            width: 100%;
+            background: #FFFFFF;
+            color: #2D93FF;
+            border: none;
+            border-radius: 22px;
+            margin-top: 20px;
+            transition: background 0.3s;
+            cursor: not-allowed;
+            font-size: 20px;
+            height: 62px;
+        }
+
+        button:hover:not([disabled]) {
+            cursor: pointer;
+        }
+
+        button:disabled {
+            color: #67b3e4;
+            background: linear-gradient(to left, #81e4ff, #98caff);
+            cursor: default;
+            pointer-events: none
+        }
+
+        button:active {
+            background: #007CFF !important;
+            color: #FFFFFF;
+        }
+
+        .error-message {
+            color: #FF7900;
+            font-size: 12px;
+            display: none;
+        }
+
+        .error {
+            border: 2px solid #FF7900;
+        }
+
+        .error::placeholder {
+            color: #FF7900;
+        }
+
+        .bot-container {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+        }
+
+    </style>
+
+</head>
+<body>
+
+    <div class="login-container">
+        <img src="logo.svg" alt="Логотип" class="logo">
+        <input type="text" id="nameInput" placeholder="Имя">
+        <input type="email" id="emailInput" placeholder="Email">
+        <button id="submitButton">Начать игру</button>
+    </div>
+
+
+    <script>
+        const nameInput = document.getElementById('nameInput');
+        const emailInput = document.getElementById('emailInput');
+        const submitButton = document.getElementById('submitButton');
+		const sendurl = "Твоя URL здесь";
+
+
+        nameInput.addEventListener('focus', function() {
+            this.placeholder = '';
+            this.classList.remove('error');
+        });
+
+        // Добавляем обработчики событий input для nameInput и emailInput
+        nameInput.addEventListener('input', function() {
+            if (this.value.trim()) {
+                this.classList.remove('error');
+            }
+        });
+
+        // Обработчик события blur для nameInput
+        nameInput.addEventListener('blur', function() {
+            if (!this.value.trim()) {
+                this.classList.add('error');
+                this.placeholder = "Поле \"Имя\" не заполнено"; // Сообщение об ошибке в placeholder
+            }
+        });
+
+
+        // Обработчик события focus для emailInput
+        emailInput.addEventListener('focus', function() {
+            this.placeholder = '';
+            this.classList.remove('error');
+        });
+
+        emailInput.addEventListener('input', function() {
+            if (this.value.trim()) {
+                this.classList.remove('error');
+            }
+        });
+
+        emailInput.addEventListener('blur', function() {
+            if (!this.value.trim()) {
+                this.classList.add('error');
+                this.placeholder = "Поле \"Email\" не заполнено";
+            } else if (!isValidEmail(this.value)) {
+                this.classList.add('error');
+                this.value = ''; // Очищаем поле email
+                this.placeholder = "Email заполнен неверно"; // Отображаем сообщение об ошибке в placeholder
+                updateButtonState();
+            }
+        });
+
+        function isValidEmail(email) {
+            // Регулярное выражение для проверки валидности email
+            var re = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
+            return re.test(String(email).toLowerCase());
+        }
+
+
+        function updateButtonState() {
+            // Кнопка будет неактивной, если любое из полей пустое
+            submitButton.disabled = !nameInput.value.trim() || !emailInput.value.trim();
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            updateButtonState(); // Вызовите эту функцию сразу после загрузки страницы
+        });
+
+        nameInput.addEventListener('input', updateButtonState);
+        emailInput.addEventListener('input', updateButtonState);
+		
+		function validateInputs(){
+		return true;
+		}
+
+		async function sendData(url) {
+		const formData  = new FormData();
+
+		formData.append("email", emailInput.value);
+		formData.append("name", nameInput.value);
+
+		const response = fetch(url, {
+			headers : {'ngrok-skip-browser-warning': 'true'},
+			method: 'POST',
+			body: formData
+		});
+		response.then(function(response) {
+		console.log(response.status);
+		console.log("response");
+		console.log(response);
+		});
+		}
+
+
+        submitButton.addEventListener('click', function(e) {
+            e.preventDefault(); // Всегда предотвращаем отправку формы
+            if (validateInputs()) {
+                // Здесь можно добавить действия для отправки формы, если все валидно
+				sendData(sendurl);
+                console.log("Форма валидна и может быть отправлена");
+            }
+        });
+    </script>
+</body>
+</html>
