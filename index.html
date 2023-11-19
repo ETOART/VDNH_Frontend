@@ -240,27 +240,27 @@
         nameInput.addEventListener('input', updateButtonState);
         emailInput.addEventListener('input', updateButtonState);
 		
-		function validateInputs(){
-		return true;
-		}
+	function validateInputs(){
+	return true;
+	}
 
-		async function sendData(url) {
-		const formData  = new FormData();
+	async function sendData(url) {
+	const formData  = new FormData();
 
-		formData.append("email", emailInput.value);
-		formData.append("name", nameInput.value);
+	formData.append("email", emailInput.value);
+	formData.append("name", nameInput.value);
 
-		const response = fetch(url, {
-			headers : {'ngrok-skip-browser-warning': 'true'},
-			method: 'POST',
-			body: formData
-		});
-		response.then(function(response) {
-		console.log(response.status);
-		console.log("response");
-		console.log(response);
-		});
-		}
+	const response = fetch(url, {
+		headers : {'ngrok-skip-browser-warning': 'true'},
+		method: 'POST',
+		body: formData
+	});
+	response.then(function(response) {
+	console.log(response.status);
+	console.log("response");
+	console.log(response);
+	});
+	}
 
 
         submitButton.addEventListener('click', function(e) {
