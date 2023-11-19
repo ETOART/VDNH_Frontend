@@ -267,7 +267,7 @@
             e.preventDefault(); // Всегда предотвращаем отправку формы
             if (validateInputs()) {
                 // Здесь можно добавить действия для отправки формы, если все валидно
-				sendData(sendurl);
+				sendData(sendurl+"/register");
                 console.log("Форма валидна и может быть отправлена");
             }
         });
