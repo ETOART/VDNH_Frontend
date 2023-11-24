@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet">
@@ -16,15 +17,16 @@
         }
         body {
     font-family: 'Inter', sans-serif;
-    background:  linear-gradient(to bottom left, #4AFFD8, #00CAFF, #2D93FF, #007CFF);
-    background-repeat: no-repeat;
     margin: 0;
     padding: 0;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh; /* Заменяем height на min-height */
     position: relative;
+    background: linear-gradient(to bottom left, #4AFFD8, #00CAFF, #2D93FF, #007CFF);
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 
