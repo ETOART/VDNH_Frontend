@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,7 +8,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet">
     <title>Форма входа</title>
-    <style>
+
+       <style>
         html, body {
             height: 100%;
             overflow: hidden;
@@ -43,6 +45,18 @@
             object-fit: contain;
             margin-bottom: 50px;
         }
+        input[type="checkbox"] {
+            margin-right: 20px;
+            vertical-align: left; /* Align the checkbox with the text vertically */
+        }
+
+        label[for="privacyCheckbox"] {
+            display: flex;
+            align-items: left;
+            margin-bottom: 15px;
+            color: white;
+        }
+
 
         input[type="text"], input[type="email"] {
             font-family: 'Inter', sans-serif;
@@ -157,119 +171,124 @@
         }
 
     </style>
-
 </head>
+
 <body>
 
     <div class="login-container">
         <img src="logo.svg" alt="Логотип" class="logo">
         <input type="text" id="nameInput" placeholder="Имя">
         <input type="email" id="emailInput" placeholder="Email">
+        <label for="privacyCheckbox">
+            <input type="checkbox" id="privacyCheckbox"> Я принимаю &nbsp<a href="https://rosreestr.team/privacy" target="_blank" id="privacyLink"> политику конфиденциальности</a>
+        </label>
+ 
+        <!-- Add a warning message for the checkbox -->
+        <div id="privacyWarning" class="error-message">Пожалуйста, примите политику конфиденциальности</div>
+
         <button id="submitButton">Начать игру</button>
     </div>
-
 
     <script>
         const nameInput = document.getElementById('nameInput');
         const emailInput = document.getElementById('emailInput');
         const submitButton = document.getElementById('submitButton');
-		const sendurl = " https://vdnh.ngrok.app";
-        
-        nameInput.addEventListener('focus', function() {
+        const privacyCheckbox = document.getElementById('privacyCheckbox');
+        const privacyWarning = document.getElementById('privacyWarning');
+        const sendurl = " https://vdnh.ngrok.app";
+
+        nameInput.addEventListener('focus', function () {
             this.placeholder = '';
             this.classList.remove('error');
         });
 
-        // Добавляем обработчики событий input для nameInput и emailInput
-        nameInput.addEventListener('input', function() {
+        nameInput.addEventListener('input', function () {
             if (this.value.trim()) {
                 this.classList.remove('error');
             }
         });
 
-        // Обработчик события blur для nameInput
-        nameInput.addEventListener('blur', function() {
+        nameInput.addEventListener('blur', function () {
             if (!this.value.trim()) {
                 this.classList.add('error');
-                this.placeholder = "Поле \"Имя\" не заполнено"; // Сообщение об ошибке в placeholder
+                this.placeholder = "Поле \"Имя\" не заполнено";
             }
         });
 
-
-        // Обработчик события focus для emailInput
-        emailInput.addEventListener('focus', function() {
+        emailInput.addEventListener('focus', function () {
             this.placeholder = '';
             this.classList.remove('error');
         });
 
-        emailInput.addEventListener('input', function() {
+        emailInput.addEventListener('input', function () {
             if (this.value.trim()) {
                 this.classList.remove('error');
             }
         });
 
-        emailInput.addEventListener('blur', function() {
+        emailInput.addEventListener('blur', function () {
             if (!this.value.trim()) {
                 this.classList.add('error');
                 this.placeholder = "Поле \"Email\" не заполнено";
             } else if (!isValidEmail(this.value)) {
                 this.classList.add('error');
-                this.value = ''; // Очищаем поле email
-                this.placeholder = "Email заполнен неверно"; // Отображаем сообщение об ошибке в placeholder
+                this.value = '';
+                this.placeholder = "Email заполнен неверно";
                 updateButtonState();
             }
         });
 
+        privacyCheckbox.addEventListener('change', function () {
+            privacyWarning.style.display = privacyCheckbox.checked ? 'none' : 'block';
+            updateButtonState();
+        });
+
         function isValidEmail(email) {
-            // Регулярное выражение для проверки валидности email
             var re = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
             return re.test(String(email).toLowerCase());
         }
 
-
         function updateButtonState() {
-            // Кнопка будет неактивной, если любое из полей пустое
-            submitButton.disabled = !nameInput.value.trim() || !emailInput.value.trim();
+            submitButton.disabled = !nameInput.value.trim() || !emailInput.value.trim() || !privacyCheckbox.checked;
         }
 
         document.addEventListener('DOMContentLoaded', function () {
-            updateButtonState(); // Вызовите эту функцию сразу после загрузки страницы
+            updateButtonState();
         });
 
         nameInput.addEventListener('input', updateButtonState);
         emailInput.addEventListener('input', updateButtonState);
-		
-	function validateInputs(){
-	return true;
-	}
 
-	async function sendData(url) {
-	const formData  = new FormData();
+        function validateInputs() {
+            return true;
+        }
 
-	formData.append("email", emailInput.value);
-	formData.append("name", nameInput.value);
+        async function sendData(url) {
+            const formData = new FormData();
 
-	const response = fetch(url, {
-		headers : {'ngrok-skip-browser-warning': 'true'},
-		method: 'POST',
-		body: formData
-	});
-	response.then(function(response) {
-	console.log(response.status);
-	console.log("response");
-	console.log(response);
-	});
-	}
+            formData.append("email", emailInput.value);
+            formData.append("name", nameInput.value);
 
+            const response = fetch(url, {
+                headers: { 'ngrok-skip-browser-warning': 'true' },
+                method: 'POST',
+                body: formData
+            });
+            response.then(function (response) {
+                console.log(response.status);
+                console.log("response");
+                console.log(response);
+            });
+        }
 
-        submitButton.addEventListener('click', function(e) {
-            e.preventDefault(); // Всегда предотвращаем отправку формы
+        submitButton.addEventListener('click', function (e) {
+            e.preventDefault();
             if (validateInputs()) {
-                // Здесь можно добавить действия для отправки формы, если все валидно
-				sendData(sendurl+"/register/");
+                sendData(sendurl + "/register/");
                 console.log("Форма валидна и может быть отправлена");
             }
         });
     </script>
 </body>
+
 </html>
